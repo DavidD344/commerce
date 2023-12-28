@@ -1,0 +1,24 @@
+A ideia e rodar por fora pelo ts-node. Nem vou compilar para javascript, a parte de teste e totalmente desacoplada da aplicação e basicamente so vou importar as interfaces e metodos da aplicação para usar nos testes
+
+npm install -D jest ts-jest @types/jest
+
+npx ts-jest config:init
+
+
+incluo a pasta test em include e no ts config.
+
+isso vai fazer o intelisense funcionar porem quando compilar ele vai compilar a pasta teste por isso apos a compilação devemos usar o rimraf para apagar o diretorio de testes
+
+isso vai fazer com que nao precisemos de um arquivo tsconfig separado e vai fazer com que os testes estejam desacoplados porem ainda sim integrados com qualquer alteração na aplicação
+
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
+  isso no jest.config  para que ele ache que esta na raiz de src porem nao esta
+
+  agora vamos criar um tsconfig.build.json e usar ele para o buildno package.json 
+
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+}

@@ -1,0 +1,20 @@
+{
+  "extends": "standard-with-typescript",
+    "env": {
+      "jest": true
+    },
+    "overrides": [
+      {
+        "files": ["./src/**/*.js", "./src/**/*.jsx", "./src/**/*.ts", "./src/**/*.tsx", "./tests/**/*.tsx"]
+
+      }
+    ],
+  "rules": {
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/consistent-type-definitions":"off"
+
+  },
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
+}

@@ -1,0 +1,6 @@
+ npm i -D husky
+  748  npm pkg set scripts.prepare="husky install"
+  749  npm run prepare
+  750  npx husky add .husky/pre-commit "npx lint-staged"
+  751  npx husky add .husky/pre-push "npm run test" ou npx husky add .husky/pre-push "npm run test:coverage" 
+
