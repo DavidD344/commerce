@@ -8,8 +8,10 @@
   "editor.fontLigatures": true,
   // "editor.fontSize": 16,
   "editor.renderWhitespace": "boundary",
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
 
   // "javascript.format.insertSpaceBeforeFunctionParenthesis": true
   // =========================================================================
+
+    "editor.wordWrap": "on"
 }

@@ -1,15 +1,14 @@
 import 'module-alias/register'
-import { teste } from '@/domain'
 import express, { type Request, type Response } from 'express'
 import cors from 'cors'
+import routers from '@/infra/routes'
 
-console.log('rodei suaves')
-console.log(teste)
+const port = process.env.PORT ?? 5000
 const app = express()
 app.use(cors())
-const port = 5000
 
-app.get('/auth', (req: Request, res: Response) => {
+app.use(routers)
+app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!')
 })
 
