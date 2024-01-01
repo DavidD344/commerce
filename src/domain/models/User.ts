@@ -7,6 +7,6 @@ export interface User {
 }
 
 export interface UserAuthentication {
-  jwt: string
+  jwt: string | undefined
 
 }

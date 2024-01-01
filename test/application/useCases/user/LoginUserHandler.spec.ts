@@ -1,4 +1,4 @@
-import { LoginUserHandler } from '@/application/useCases/user/LoginUserHandle'
+import { LoginUserHandler } from '@/application/useCases/user/LoginUserHandler'
 import { type LoginUserDTO } from '@/domain/dtos/user'
 
 describe('testing LoginUserHandler', () => {
