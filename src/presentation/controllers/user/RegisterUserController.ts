@@ -1,14 +1,15 @@
-import { LoginUserHandler } from '@/application/useCases/user'
+import { RegisterUserHandler } from '@/application/useCases/user'
 import { type UserAuthentication } from '@/domain/models/User'
 import { type Response, type Request } from 'express'
 
-export class LoginUserController {
-  private readonly loginUserHandler = LoginUserHandler.build()
+export class RegisterUserController {
+  private readonly registerUserHandler = RegisterUserHandler.build()
   async handler (req: Request, res: Response): Promise<Response> {
     // res.send('De dentro do controller')
     try {
-      const data = { email: 'a@gmail.com', password: '123' }
-      const token: UserAuthentication = await this.loginUserHandler.login(data)
+      const data = { email: 'david', password: '123', name: '' }
+      const token: UserAuthentication = await this.registerUserHandler.register(data)
+      console.log(token)
       return res.send(`De dentro do controller ${token.jwt}`)
     } catch (erro) {
       return res.send(erro)

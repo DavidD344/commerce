@@ -1,18 +1,18 @@
-import { type LoginUserDTO } from '@/domain/dtos/user'
+import { type RegisterUserDTO } from '@/domain/dtos/user'
 import { type UserAuthentication } from '@/domain/models/User'
-import { type LoginUser } from '@/domain/useCases/user'
 import { sign } from 'jsonwebtoken'
 
-export class LoginUserHandler implements LoginUser {
+export class RegisterUserHandler {
   private constructor () {}
-  static build (): LoginUserHandler {
-    return new LoginUserHandler()
+
+  static build (): RegisterUserHandler {
+    return new RegisterUserHandler()
   }
 
-  async login (data: LoginUserDTO): Promise<UserAuthentication> {
+  async register (data: RegisterUserDTO): Promise<UserAuthentication> {
     try {
       if (data.email === 'david' && data.password === '123') {
-        const id = data.email // esse id viria do banco de dados
+        const id = 1 // esse id viria do banco de dados
         const token = sign({ id }, process.env.JWT_SECRET as string, {
           expiresIn: 300 // expires in 5min
         }
