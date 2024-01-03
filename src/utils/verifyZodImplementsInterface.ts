@@ -1,3 +1,1 @@
-export function verifyZodImplementsInterface<T> (data: T): T {
-  return data
-}
+export function verifyZodImplementsInterface<T> (_value: T): void {}

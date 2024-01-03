@@ -7,6 +7,7 @@ export const HelloUserValidDTO = z.object({
     name: z.string({
       required_error: 'Full name is required'
     }),
+
     email: z
       .string({
         required_error: 'Email is required'
@@ -15,5 +16,6 @@ export const HelloUserValidDTO = z.object({
   }).required()
     .strict()
 })
-
-verifyZodImplementsInterface<HelloUserDTO>(HelloUserValidDTO.parse({}).body)
+// Verifica se o object zod tem os mesmos campos da interface
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+verifyZodImplementsInterface<{ body: HelloUserDTO }>({ } as z.infer<typeof HelloUserValidDTO>)
