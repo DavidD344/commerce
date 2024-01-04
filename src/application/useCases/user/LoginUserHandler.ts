@@ -1,9 +1,10 @@
+import { GenerateAuthorizationHandler } from '@/application/security/authentication/GenerateAuthorizationHandler'
 import { type LoginUserDTO } from '@/domain/dtos/user'
 import { type UserAuthentication } from '@/domain/models/User'
 import { type LoginUser } from '@/domain/useCases/user'
-import { sign } from 'jsonwebtoken'
 
 export class LoginUserHandler implements LoginUser {
+  generateAuthorizationHandler: GenerateAuthorizationHandler = GenerateAuthorizationHandler.build()
   private constructor () {}
   static build (): LoginUserHandler {
     return new LoginUserHandler()
@@ -12,14 +13,10 @@ export class LoginUserHandler implements LoginUser {
   async login (data: LoginUserDTO): Promise<UserAuthentication> {
     try {
       if (data.email === 'david' && data.password === '123') {
-        const id = data.email // esse id viria do banco de dados
-        const token = sign({ id }, process.env.JWT_SECRET as string, {
-          expiresIn: 300 // expires in 5min
-        }
-        )
-        return { jwt: token }
+        const token = this.generateAuthorizationHandler.generate(data.email)
+        return token
       } else {
-        throw new Error('Erro ao processar o login')
+        throw new Error('Error with authentication')
       }
     } catch (error) {
       console.log(error)

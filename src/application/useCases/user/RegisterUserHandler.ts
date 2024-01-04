@@ -1,26 +1,26 @@
+import { GenerateAuthorizationHandler } from '@/application/security/authentication/GenerateAuthorizationHandler'
 import { type RegisterUserDTO } from '@/domain/dtos/user'
-import { type UserAuthentication } from '@/domain/models/User'
-import { sign } from 'jsonwebtoken'
+import { type UserAuthentication, type LoadedUser } from '@/domain/models/User'
+import { type RegisterUser } from '@/domain/useCases/user'
 
-export class RegisterUserHandler {
+export class RegisterUserHandler implements RegisterUser {
+  generateAuthorizationHandler: GenerateAuthorizationHandler = GenerateAuthorizationHandler.build()
   private constructor () {}
-
   static build (): RegisterUserHandler {
     return new RegisterUserHandler()
   }
 
   async register (data: RegisterUserDTO): Promise<UserAuthentication> {
+    const userBD: LoadedUser = {
+      id: '1',
+      name: 'Usuário Exemplo',
+      email: 'exemplo@email.com',
+      createdAt: new Date('2023-01-01'),
+      updatedAt: new Date('2023-01-02')
+    }
     try {
-      if (data.email === 'david' && data.password === '123') {
-        const id = 1 // esse id viria do banco de dados
-        const token = sign({ id }, process.env.JWT_SECRET as string, {
-          expiresIn: 300 // expires in 5min
-        }
-        )
-        return { jwt: token }
-      } else {
-        throw new Error('Erro ao processar o login')
-      }
+      const token = this.generateAuthorizationHandler.generate(userBD.id)
+      return token
     } catch (error) {
       console.log(error)
       return { jwt: undefined }
