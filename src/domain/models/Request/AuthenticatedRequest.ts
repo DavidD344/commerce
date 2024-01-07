@@ -1,5 +1,5 @@
 import { type Request } from 'express'
 
 export interface AuthenticatedRequest extends Request {
-  user?: any // Defina o tipo correto para a propriedade 'user' conforme necessário
+  user?: { id: string } // Defina o tipo correto para a propriedade 'user' conforme necessário
 }

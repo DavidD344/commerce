@@ -1,18 +1,13 @@
 import { RegisterUserHandler } from '@/application/useCases/user'
-import { type UserAuthentication } from '@/domain/models/User'
+import { type RegisterUserDTO } from '@/domain/dtos/user'
+import { ApiDefaultHandler } from '@/presentation/response/ApiDefaultHandler'
 import { type Response, type Request } from 'express'
 
 export class RegisterUserController {
   private readonly registerUserHandler = RegisterUserHandler.build()
-  async handler (req: Request, res: Response): Promise<Response> {
-    // res.send('De dentro do controller')
-    try {
-      const data = { email: 'david', password: '123', name: '' }
-      const token: UserAuthentication = await this.registerUserHandler.register(data)
-      console.log(token)
-      return res.send(`De dentro do controller ${token.jwt}`)
-    } catch (erro) {
-      return res.send(erro)
-    }
+  async handler (req: Request, res: Response): Promise<void> {
+    const reqValid: RegisterUserDTO = req.body
+    const response = await this.registerUserHandler.register(reqValid)
+    ApiDefaultHandler.build().sendResponse({ res, body: response })
   }
 }

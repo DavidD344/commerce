@@ -1,29 +1,35 @@
-import { GenerateAuthorizationHandler } from '@/application/security/authentication/GenerateAuthorizationHandler'
+import { isEmpty } from '@/application/helper'
+import { DBCreateUserHandler } from '@/application/repositories/user/DBCreateUserHandler'
+import { DBFindUserByEmailHandler } from '@/application/repositories/user/DBFindUserByEmailHandler'
+import { GenerateAuthorizationHandler } from '@/application/security/authentication'
+import { HashCryptHandler } from '@/application/security/crypto'
 import { type RegisterUserDTO } from '@/domain/dtos/user'
-import { type UserAuthentication, type LoadedUser } from '@/domain/models/User'
+import { type UserAuthentication } from '@/domain/models/User'
+import { type ApiDefaultDTO } from '@/domain/presentation/response/dtos/default'
 import { type RegisterUser } from '@/domain/useCases/user'
+import { ApiError } from '@/presentation/errors'
+import { StatusCodes } from 'http-status-codes'
 
 export class RegisterUserHandler implements RegisterUser {
-  generateAuthorizationHandler: GenerateAuthorizationHandler = GenerateAuthorizationHandler.build()
   private constructor () {}
   static build (): RegisterUserHandler {
     return new RegisterUserHandler()
   }
 
-  async register (data: RegisterUserDTO): Promise<UserAuthentication> {
-    const userBD: LoadedUser = {
-      id: '1',
-      name: 'Usuário Exemplo',
-      email: 'exemplo@email.com',
-      createdAt: new Date('2023-01-01'),
-      updatedAt: new Date('2023-01-02')
+  async register (data: RegisterUserDTO): Promise<ApiDefaultDTO<UserAuthentication>> {
+    const verifyEmailUserExists = await DBFindUserByEmailHandler.build().find({ email: data.email })
+    if (!isEmpty(verifyEmailUserExists)) {
+      throw new ApiError({ message: 'Email already exists', statusCode: StatusCodes.PRECONDITION_FAILED })
     }
-    try {
-      const token = this.generateAuthorizationHandler.generate(userBD.id)
-      return token
-    } catch (error) {
-      console.log(error)
-      return { jwt: undefined }
-    }
+    const passwordHash: string = await HashCryptHandler.build().hash(data.password)
+    const userCreated = await DBCreateUserHandler.build().create({ ...data, password: passwordHash })
+    const token = GenerateAuthorizationHandler.build().generate(userCreated.id)
+    return { statusCode: StatusCodes.CREATED, data: token, success: true }
   }
 }
+
+// verifica se as entradas tao dboa
+// verifica se o email ja existe
+// criptografar senha
+// Cria no bd
+// envia jwt

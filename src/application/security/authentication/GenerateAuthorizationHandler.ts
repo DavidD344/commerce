@@ -12,7 +12,9 @@ export class GenerateAuthorizationHandler implements GenerateAuthorization {
   generate (id: string): UserAuthentication {
     try {
       const token = sign({ id }, process.env.JWT_SECRET as string, {
-        expiresIn: process.env.JWT_EXPIRESIN // expires in 5min
+        expiresIn: Number(process.env.JWT_EXPIRESIN as string)
+        // expiresIn: 300 // expires in 5min
+
       }
       )
       return { jwt: token }
