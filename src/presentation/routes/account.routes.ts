@@ -1,4 +1,4 @@
-import { HelloUserValidDTO, RegisterUserValidDTO } from '@/application/dtos/user'
+import { HelloUserValidDTO, LoginUserValidDTO, RegisterUserValidDTO } from '@/application/dtos/user'
 import { LoginUserController } from '@/presentation/controllers/user/LoginUserController'
 import { RegisterUserController } from '@/presentation/controllers/user/RegisterUserController'
 import { ensureAuthentication, validationObjectZod } from '@/presentation/middlewares'
@@ -13,7 +13,7 @@ accountRoutes.get('/register', [asyncWrapper(validationObjectZod(RegisterUserVal
   await registerUserController.handler(req, res)
 })]
 )
-accountRoutes.get('/login', [asyncWrapper(async (req: Request, res: Response): Promise<void> => {
+accountRoutes.get('/login', [asyncWrapper(validationObjectZod(LoginUserValidDTO)), asyncWrapper(async (req: Request, res: Response): Promise<void> => {
   await loginUserController.handler(req, res)
 })]
 )

@@ -3,6 +3,5 @@ export function setupUnhandledRejectionHandler (): void {
     console.log(reason.name, reason.message)
     console.log('UNHANDLED REJECTION! 💥 Shutting down...')
     process.exit(1)
-    throw reason
   })
 }

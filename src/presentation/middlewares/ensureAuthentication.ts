@@ -9,7 +9,7 @@ export interface IPayload {
 }
 
 export async function ensureAuthentication (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
-  const token: string | undefined = req.headers.authorization
+  const token = req.headers.authorization
   if (isEmpty(token) || token === undefined || token.trim() === '') {
     throw new ApiError({ statusCode: StatusCodes.UNAUTHORIZED, message: 'Invalid header authorization token' })
   }

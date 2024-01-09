@@ -1,10 +1,15 @@
 import { RegisterUserHandler } from '@/application/useCases/user'
 import { type RegisterUserDTO } from '@/domain/dtos/user'
-import { type DefaultController } from '@/domain/presentation/controllers'
-import { ApiDefaultHandler } from '@/presentation/response'
+import { ApiDefaultHandler } from '@/presentation/response/ApiDefaultHandler'
 import { type Response, type Request } from 'express'
 
-export class RegisterUserController implements DefaultController {
+export interface DefaultController {
+
+  handler: (req: Request, res: Response) => Promise<void>
+
+}
+
+export class RegisterUserController {
   private readonly registerUserHandler = RegisterUserHandler.build()
   async handler (req: Request, res: Response): Promise<void> {
     const reqValid: RegisterUserDTO = req.body

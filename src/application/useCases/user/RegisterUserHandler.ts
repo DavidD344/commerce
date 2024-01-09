@@ -1,6 +1,5 @@
 import { isEmpty } from '@/application/helper'
-import { DBCreateUserHandler } from '@/application/repositories/user/DBCreateUserHandler'
-import { DBFindUserByEmailHandler } from '@/application/repositories/user/DBFindUserByEmailHandler'
+import { DBCreateUserHandler, DBFindUserByEmailHandler } from '@/application/repositories/user'
 import { GenerateAuthorizationHandler } from '@/application/security/authentication'
 import { HashCryptHandler } from '@/application/security/crypto'
 import { type RegisterUserDTO } from '@/domain/dtos/user'
