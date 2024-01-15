@@ -23,9 +23,9 @@ accountRoutes.get('/login', [
     await loginUserController.handler(req, res)
   })]
 )
-accountRoutes.get('/hello',
+accountRoutes.get('/dashboard',
   asyncWrapper(ensureAuthentication),
-  asyncWrapper(ensureRoleAuthorization(['ADMIN', 'USER'])),
+  asyncWrapper(ensureRoleAuthorization(['ADMIN'])),
   asyncWrapper(validationObjectZod(HelloUserValidDTO)), async (req: Request, res: Response): Promise<void> => {
     res.send('hello worls')
   }
