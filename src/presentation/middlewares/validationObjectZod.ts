@@ -1,5 +1,7 @@
 import { type Response, type NextFunction, type Request } from 'express'
-import { type AnyZodObject } from 'zod'
+import { ZodError, type AnyZodObject } from 'zod'
+import { ApiError } from '../errors'
+import { StatusCodes } from 'http-status-codes'
 
 export const validationObjectZod = (schema: AnyZodObject) =>
   async (req: Request, res: Response, next: NextFunction) => {
@@ -13,7 +15,11 @@ export const validationObjectZod = (schema: AnyZodObject) =>
       })
       next()
     } catch (error) {
-      console.log('passei no erro')
-      return res.status(400).json(error)
+      if (error instanceof ZodError) {
+        const messages = error.issues.map(issue => issue.message)
+
+        throw new ApiError({ message: 'Validation error', statusCode: StatusCodes.BAD_REQUEST, rawErrors: [messages] })
+      }
+      throw new ApiError({ message: 'Validation error', statusCode: StatusCodes.BAD_REQUEST, rawErrors: [error] })
     }
   }

@@ -1,5 +1,5 @@
-import { type UserAuthentication } from '@/domain/models/User'
+import { type UserToken, type UserAuthentication } from '@/domain/models/User'
 
 export interface GenerateAuthorization {
-  generate: (id: string) => UserAuthentication
+  generate: (data: UserAuthentication) => UserToken
 }

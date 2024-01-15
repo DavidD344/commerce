@@ -2,7 +2,7 @@ import { DBFindUserByEmailWithPasswordHandler } from '@/application/repositories
 import { GenerateAuthorizationHandler } from '@/application/security/authentication'
 import { HashComparerHandler } from '@/application/security/crypto'
 import { type LoginUserDTO } from '@/domain/dtos/user'
-import { type User, type UserAuthentication } from '@/domain/models/User'
+import { type UserToken, type User } from '@/domain/models/User'
 import { type ApiDefaultDTO } from '@/domain/presentation/response/dtos/default'
 import { type LoginUser } from '@/domain/useCases/user'
 import { ApiError } from '@/presentation/errors'
@@ -14,7 +14,7 @@ export class LoginUserHandler implements LoginUser {
     return new LoginUserHandler()
   }
 
-  async login (data: LoginUserDTO): Promise<ApiDefaultDTO<UserAuthentication>> {
+  async login (data: LoginUserDTO): Promise<ApiDefaultDTO<UserToken>> {
     const verifyEmailUserExists: User | null = await DBFindUserByEmailWithPasswordHandler.build().find({ email: data.email })
 
     if (verifyEmailUserExists === null) {
@@ -26,7 +26,7 @@ export class LoginUserHandler implements LoginUser {
       throw new ApiError({ message: 'Invalid email and/or password', statusCode: StatusCodes.PRECONDITION_FAILED })
     }
 
-    const token = GenerateAuthorizationHandler.build().generate(data.email)
+    const token = GenerateAuthorizationHandler.build().generate({ id: verifyEmailUserExists.id, role: verifyEmailUserExists.role })
 
     return { data: token, statusCode: StatusCodes.ACCEPTED, success: true }
   }

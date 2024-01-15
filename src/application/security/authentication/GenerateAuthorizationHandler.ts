@@ -1,4 +1,4 @@
-import { type UserAuthentication } from '@/domain/models/User'
+import { type UserToken, type UserAuthentication } from '@/domain/models/User'
 import { type GenerateAuthorization } from '@/domain/security/authentication'
 import { sign } from 'jsonwebtoken'
 
@@ -9,9 +9,9 @@ export class GenerateAuthorizationHandler implements GenerateAuthorization {
     return new GenerateAuthorizationHandler()
   }
 
-  generate (id: string): UserAuthentication {
+  generate (data: UserAuthentication): UserToken {
     try {
-      const token = sign({ id }, process.env.JWT_SECRET as string, {
+      const token = sign(data, process.env.JWT_SECRET as string, {
         expiresIn: Number(process.env.JWT_EXPIRESIN as string)
         // expiresIn: 300 // expires in 5min
 
